@@ -1,0 +1,101 @@
+@import "tailwindcss";
+@import "@fontsource-variable/archivo/wdth.css";
+@import "@fontsource-variable/inter";
+@import "@fontsource-variable/jetbrains-mono";
+
+/* ------------------------------------------------------------------
+   Design tokens: the ONLY place brand colors / fonts are defined.
+   Direction: "nature, tamed by hand." Forest greens + industrial greys,
+   hard edges, hairline rules, spec-sheet labels. One restrained accent.
+   ------------------------------------------------------------------ */
+@theme {
+  /* Neutrals: bone → concrete → steel → charcoal */
+  --color-bone: #f3f2ed;       /* page background */
+  --color-concrete: #e3e3dd;   /* alt section background */
+  --color-line: #c9cac3;       /* hairline rules on light backgrounds */
+  --color-steel: #5d635f;      /* secondary text (AA on bone/concrete) */
+  --color-charcoal: #1c201e;   /* primary text, dark sections */
+  --color-graphite: #2a2f2c;   /* raised surfaces on dark */
+
+  /* Greens */
+  --color-forest: #1e3a2a;     /* primary brand green, CTAs, dark bands */
+  --color-moss: #3f6a4c;       /* secondary green */
+  --color-sage: #a9b8a6;       /* muted green for text on dark */
+  --color-lichen: #c3d36b;     /* single accent: use sparingly, on dark only */
+
+  --font-display: "Archivo Variable", ui-sans-serif, system-ui, sans-serif;
+  --font-sans: "Inter Variable", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-mono: "JetBrains Mono Variable", ui-monospace, SFMono-Regular, Menlo, monospace;
+}
+
+@layer base {
+  :root {
+    color-scheme: light;
+  }
+  html {
+    scroll-behavior: smooth;
+    scroll-padding-top: 4.5rem;
+    -webkit-text-size-adjust: 100%;
+  }
+  body {
+    background: var(--color-bone);
+    color: var(--color-charcoal);
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+    overflow-x: clip;
+  }
+  h1, h2, h3, h4 {
+    font-family: var(--font-display);
+    font-stretch: 112%;
+    letter-spacing: -0.025em;
+    text-wrap: balance;
+  }
+  p {
+    text-wrap: pretty;
+  }
+  ::selection {
+    background: var(--color-forest);
+    color: var(--color-bone);
+  }
+  :focus-visible {
+    outline: 2px solid var(--color-moss);
+    outline-offset: 3px;
+  }
+}
+
+@layer components {
+  /* Spec-sheet label: small mono caps */
+  .label {
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    line-height: 1rem;
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+}
+
+/* Scroll-reveal: CSS-only, progressive enhancement, motion-safe, subtle */
+@media (prefers-reduced-motion: no-preference) {
+  @supports (animation-timeline: view()) {
+    .reveal {
+      animation: reveal-up linear both;
+      animation-timeline: view();
+      animation-range: entry 0% entry 30%;
+    }
+    @keyframes reveal-up {
+      from { opacity: 0; transform: translateY(16px); }
+      to { opacity: 1; transform: none; }
+    }
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}

@@ -1,0 +1,78 @@
+---
+/**
+ * Image slot. If the slot's `file` (or src/assets/images/<id>.*) exists it is
+ * rendered as an optimized responsive image; otherwise a labeled placeholder
+ * (showing the slot's brief from site.ts) is rendered in its place.
+ */
+import { Image } from 'astro:assets';
+import type { ImageMetadata } from 'astro';
+import { images, type ImageId } from '../../content/site';
+
+interface Props {
+  id: ImageId;
+  class?: string;
+  /** Load immediately (use for above-the-fold images). */
+  eager?: boolean;
+  /** `sizes` attribute for responsive images. */
+  sizes?: string;
+  /** Fill the parent instead of using the slot's aspect ratio. */
+  fill?: boolean;
+  /** Placeholder palette for use on dark backgrounds. */
+  dark?: boolean;
+  /** Show the brief text on the placeholder. */
+  showBrief?: boolean;
+}
+
+const { id, class: className, eager = false, sizes = '100vw', fill = false, dark = false, showBrief = true } = Astro.props;
+const slot: { aspect: string; alt: string; brief: string; file?: string } = images[id];
+
+const files = import.meta.glob<{ default: ImageMetadata }>('/src/assets/images/*.{jpg,jpeg,png,webp,avif}', {
+  eager: true,
+});
+const match = Object.entries(files).find(([path]) => {
+  const name = path.split('/').pop() ?? '';
+  return slot.file ? name === slot.file : name.replace(/\.[^.]+$/, '') === id;
+});
+const src = match?.[1].default;
+const ratio = slot.aspect.replace('/', ':');
+---
+
+<div
+  class:list={['relative overflow-hidden', fill ? 'h-full w-full' : '', className]}
+  style={fill ? undefined : `aspect-ratio: ${slot.aspect}`}
+>
+  {src ? (
+    <Image
+      src={src}
+      alt={slot.alt}
+      widths={[...new Set([480, 768, 1024, 1440, 1920, 2400].filter((w) => w < src.width).concat(src.width))]}
+      sizes={sizes}
+      loading={eager ? 'eager' : 'lazy'}
+      fetchpriority={eager ? 'high' : 'auto'}
+      class="absolute inset-0 h-full w-full object-cover"
+    />
+  ) : (
+    <div
+      role="img"
+      aria-label={`Image placeholder: ${slot.alt}`}
+      class:list={[
+        'absolute inset-0 flex flex-col justify-between p-4 sm:p-5',
+        dark ? 'bg-graphite text-sage' : 'bg-concrete text-steel',
+      ]}
+      style={`background-image: repeating-linear-gradient(135deg, transparent 0 14px, ${dark ? 'rgb(255 255 255 / 0.035)' : 'rgb(0 0 0 / 0.035)'} 14px 15px)`}
+    >
+      <!-- crop marks -->
+      <span class="pointer-events-none absolute top-2 left-2 h-3 w-3 border-t border-l border-current opacity-60" aria-hidden="true"></span>
+      <span class="pointer-events-none absolute top-2 right-2 h-3 w-3 border-t border-r border-current opacity-60" aria-hidden="true"></span>
+      <span class="pointer-events-none absolute bottom-2 left-2 h-3 w-3 border-b border-l border-current opacity-60" aria-hidden="true"></span>
+      <span class="pointer-events-none absolute right-2 bottom-2 h-3 w-3 border-r border-b border-current opacity-60" aria-hidden="true"></span>
+
+      <p class="label flex flex-wrap gap-x-3 gap-y-1">
+        <span>IMG</span><span>{slot.file ?? `${id}.jpg`}</span><span>{ratio}</span>
+      </p>
+      {showBrief && (
+        <p class="max-w-xl text-xs leading-relaxed sm:text-sm" aria-hidden="true">{slot.brief}</p>
+      )}
+    </div>
+  )}
+</div>

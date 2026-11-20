@@ -1,0 +1,35 @@
+---
+import Section from './ui/Section.astro';
+import Icon from './ui/Icon.astro';
+import Photo from './ui/Photo.astro';
+import { vision } from '../content/site';
+---
+
+<Section id="vision" index="04" eyebrow={vision.eyebrow} title={vision.title}>
+  <div class="reveal">
+    <Photo id="site" sizes="(min-width: 1280px) 1216px, 100vw" class="aspect-[4/3]! sm:aspect-[21/9]!" />
+  </div>
+
+  <div class="reveal mt-12 grid gap-6 text-lg leading-relaxed text-steel md:grid-cols-2 md:gap-12">
+    {vision.intro.map((p) => <p>{p}</p>)}
+  </div>
+
+  <h3 class="label mt-16 text-steel">{vision.programsTitle}</h3>
+  <ol class="mt-4 border-t border-charcoal">
+    {vision.programs.map((p, i) => (
+      <li class="reveal grid gap-2 border-b border-line py-6 sm:grid-cols-12 sm:items-baseline sm:gap-6">
+        <span class="label text-steel sm:col-span-1">0{i + 1}</span>
+        <h4 class="flex items-center gap-3 font-display text-xl font-bold sm:col-span-5 sm:text-2xl">
+          <Icon name={p.icon} class="shrink-0 text-moss" />
+          {p.title}
+        </h4>
+        <p class="leading-relaxed text-steel sm:col-span-6">{p.text}</p>
+      </li>
+    ))}
+  </ol>
+
+  <div class="reveal mt-16 grid gap-6 bg-forest p-8 text-bone sm:p-12 lg:grid-cols-12">
+    <p class="label text-sage lg:col-span-4">{vision.notThis}</p>
+    <p class="font-display text-2xl leading-snug font-semibold sm:text-3xl lg:col-span-8">{vision.this}</p>
+  </div>
+</Section>

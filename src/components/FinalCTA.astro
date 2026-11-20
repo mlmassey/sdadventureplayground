@@ -1,0 +1,36 @@
+---
+import Button from './ui/Button.astro';
+import Photo from './ui/Photo.astro';
+import { Mail } from '@lucide/astro';
+import { finalCta, mailto, site } from '../content/site';
+---
+
+<section id="get-involved" aria-labelledby="cta-heading" class="relative isolate overflow-hidden bg-forest text-bone">
+  <div class="absolute inset-0 -z-10">
+    <Photo id="cta" fill dark showBrief={false} sizes="100vw" />
+    <div class="absolute inset-0 bg-gradient-to-r from-forest via-forest/90 to-forest/40" aria-hidden="true"></div>
+  </div>
+
+  <div class="mx-auto max-w-7xl px-4 py-24 sm:px-6 sm:py-32 lg:px-10">
+    <div class="reveal max-w-3xl">
+      <p class="label flex items-center gap-3 text-sage">
+        <span class="inline-block h-px w-12 bg-lichen" aria-hidden="true"></span>
+        {finalCta.eyebrow}
+      </p>
+      <h2 id="cta-heading" class="mt-6 text-4xl leading-[1.02] font-extrabold sm:text-6xl">{finalCta.title}</h2>
+      <div class="mt-8 space-y-4 text-lg leading-relaxed text-bone/85">
+        {finalCta.body.map((p) => <p>{p}</p>)}
+      </div>
+      <p class="mt-8 font-display text-xl font-semibold text-lichen">{finalCta.closer}</p>
+      <div class="mt-10 flex flex-col gap-4 sm:flex-row sm:items-center sm:gap-8">
+        <Button href={mailto(finalCta.cta.subject)} variant="light" size="lg">
+          <Mail size={18} aria-hidden="true" />
+          {finalCta.cta.label}
+        </Button>
+        <a href={`mailto:${site.email}`} class="font-mono text-sm underline decoration-bone/40 underline-offset-4 hover:decoration-bone">
+          {site.email}
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
