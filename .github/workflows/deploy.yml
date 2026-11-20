@@ -20,11 +20,19 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+      # Reports the Pages URL: origin + base path (e.g. /sdadventureplayground on
+      # <user>.github.io, or / once a custom domain is configured in Settings → Pages).
+      - name: Configure Pages
+        id: pages
+        uses: actions/configure-pages@v5
       - name: Build with Astro
         uses: withastro/action@v4
         with:
           node-version: 22
           package-manager: npm
+        env:
+          SITE_URL: ${{ steps.pages.outputs.origin }}
+          BASE_PATH: ${{ steps.pages.outputs.base_path }}
 
   deploy:
     needs: build
