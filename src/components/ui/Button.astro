@@ -1,0 +1,39 @@
+---
+import type { HTMLAttributes } from 'astro/types';
+
+type Variant = 'primary' | 'outline' | 'light' | 'outline-light';
+
+interface Props extends HTMLAttributes<'a'> {
+  href: string;
+  variant?: Variant;
+  size?: 'md' | 'lg';
+}
+
+const { href, variant = 'primary', size = 'md', class: className, ...rest } = Astro.props;
+const isExternal = /^https?:\/\//.test(href);
+
+const variants: Record<Variant, string> = {
+  primary: 'bg-forest text-bone border-forest hover:bg-charcoal hover:border-charcoal',
+  outline: 'bg-transparent text-charcoal border-charcoal hover:bg-charcoal hover:text-bone',
+  light: 'bg-bone text-charcoal border-bone hover:bg-lichen hover:border-lichen',
+  'outline-light': 'bg-transparent text-bone border-bone/60 hover:border-bone hover:bg-bone hover:text-charcoal',
+};
+const sizes = {
+  md: 'h-11 px-5 text-sm',
+  lg: 'h-13 px-6 text-base',
+};
+---
+
+<a
+  href={href}
+  class:list={[
+    'group inline-flex items-center justify-center gap-3 border font-semibold tracking-tight whitespace-nowrap transition-colors duration-150',
+    variants[variant],
+    sizes[size],
+    className,
+  ]}
+  {...isExternal ? { target: '_blank', rel: 'noopener' } : {}}
+  {...rest}
+>
+  <slot />
+</a>

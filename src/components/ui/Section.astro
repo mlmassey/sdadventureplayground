@@ -1,0 +1,48 @@
+---
+/**
+ * Standard section wrapper: numbered spec-sheet header, consistent spacing and grid.
+ */
+interface Props {
+  id: string;
+  index?: string;
+  eyebrow?: string;
+  title?: string;
+  tone?: 'bone' | 'concrete' | 'forest' | 'charcoal';
+  class?: string;
+}
+
+const { id, index, eyebrow, title, tone = 'bone', class: className } = Astro.props;
+
+const tones = {
+  bone: 'bg-bone text-charcoal',
+  concrete: 'bg-concrete text-charcoal',
+  forest: 'bg-forest text-bone',
+  charcoal: 'bg-charcoal text-bone',
+};
+const isDark = tone === 'forest' || tone === 'charcoal';
+const headingId = `${id}-heading`;
+---
+
+<section id={id} aria-labelledby={title ? headingId : undefined} class:list={['relative py-20 sm:py-28', tones[tone], className]}>
+  <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-10">
+    {(eyebrow || title) && (
+      <header class="reveal mb-12 sm:mb-16">
+        <div
+          class:list={[
+            'label flex items-baseline justify-between gap-4 border-t pt-4',
+            isDark ? 'border-bone/30 text-sage' : 'border-charcoal text-steel',
+          ]}
+        >
+          {eyebrow && <p>{eyebrow}</p>}
+          {index && <p aria-hidden="true">{index}</p>}
+        </div>
+        {title && (
+          <h2 id={headingId} class="mt-6 max-w-4xl text-4xl leading-[1.02] font-bold sm:text-5xl lg:text-6xl">
+            {title}
+          </h2>
+        )}
+      </header>
+    )}
+    <slot />
+  </div>
+</section>

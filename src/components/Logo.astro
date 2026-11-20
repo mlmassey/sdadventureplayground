@@ -1,0 +1,22 @@
+---
+interface Props { class?: string; inverted?: boolean }
+const { class: className, inverted = false } = Astro.props;
+---
+
+<span class:list={['inline-flex items-center gap-3', className]}>
+  <svg viewBox="0 0 40 40" class="h-9 w-9 shrink-0" aria-hidden="true">
+    <rect width="40" height="40" fill={inverted ? 'var(--color-bone)' : 'var(--color-forest)'} />
+    <!-- peak / roof truss -->
+    <path d="M8 30 L20 11 L32 30" fill="none" stroke={inverted ? 'var(--color-forest)' : 'var(--color-bone)'} stroke-width="3" stroke-linejoin="miter" />
+    <path d="M14 30 V22 M26 30 V22 M14 22 H26" fill="none" stroke={inverted ? 'var(--color-forest)' : 'var(--color-bone)'} stroke-width="2" />
+    <rect x="18.5" y="6" width="3" height="3" fill="var(--color-lichen)" />
+  </svg>
+  <span class="leading-none">
+    <span class:list={['label block text-[0.65rem]', inverted ? 'text-sage' : 'text-steel']}>San Diego</span>
+    <span
+      class:list={['mt-1 block font-display text-base font-bold tracking-tight [font-stretch:112%]', inverted ? 'text-bone' : 'text-charcoal']}
+    >
+      Adventure Playground
+    </span>
+  </span>
+</span>

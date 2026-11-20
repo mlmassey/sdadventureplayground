@@ -1,0 +1,31 @@
+---
+/**
+ * Maps semantic icon names (used in src/content/site.ts) to Lucide icons.
+ * Add new names to IconName in site.ts and to the map below.
+ */
+import {
+  ArrowRight, CalendarDays, Check, Compass, ExternalLink, Hammer, Handshake, Heart, House,
+  Lightbulb, Mail, Paintbrush, Puzzle, School, Shovel, Star, Sun, Tent, Trees, Users, Wrench,
+} from '@lucide/astro';
+import type { IconName } from '../../content/site';
+
+interface Props {
+  name: IconName;
+  size?: number;
+  class?: string;
+  strokeWidth?: number;
+}
+
+const { name, size = 24, class: className, strokeWidth = 1.5 } = Astro.props;
+
+const icons = {
+  hammer: Hammer, shovel: Shovel, brush: Paintbrush, people: Users, compass: Compass,
+  bulb: Lightbulb, star: Star, puzzle: Puzzle, heart: Heart, wrench: Wrench, sun: Sun, home: House,
+  tree: Trees, school: School, handshake: Handshake, calendar: CalendarDays, tent: Tent, check: Check,
+  arrow: ArrowRight, mail: Mail, external: ExternalLink,
+} satisfies Record<IconName, unknown>;
+
+const Component = icons[name];
+---
+
+<Component size={size} stroke-width={strokeWidth} class={className} aria-hidden="true" focusable="false" />
