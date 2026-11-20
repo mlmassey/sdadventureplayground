@@ -78,7 +78,8 @@ Any slot without a file renders a labeled placeholder showing its brief. See [`s
 1. Push this repo to GitHub.
 2. In **Settings → Pages**, set **Source** to **GitHub Actions**.
 3. Every push to `main` runs `.github/workflows/deploy.yml`, which builds and deploys.
-4. **Custom domain:** `public/CNAME` contains `sdadventureplayground.org`. At your DNS provider, add `A` records for the apex pointing to GitHub Pages (`185.199.108.153`, `185.199.109.153`, `185.199.110.153`, `185.199.111.153`) and a `CNAME` for `www` pointing to `<user>.github.io`. Then enable **Enforce HTTPS** in Settings → Pages.
+   The workflow uses `actions/configure-pages` to pass the correct `SITE_URL` and `BASE_PATH` into the build. This makes the site work at the project URL (`https://<user>.github.io/<repo>/`) and, once a custom domain is set, at `/`, with no config changes. Internal links to files in `public/` must go through `import.meta.env.BASE_URL` (see `BaseLayout.astro`), never a hard-coded leading `/`.
+4. **Custom domain:** in **Settings → Pages → Custom domain**, enter `sdadventureplayground.org` (with Actions deploys, GitHub uses this setting; `public/CNAME` is just a record). At your DNS provider, add `A` records for the apex pointing to GitHub Pages (`185.199.108.153`, `185.199.109.153`, `185.199.110.153`, `185.199.111.153`) and a `CNAME` for `www` pointing to `<user>.github.io`. Then enable **Enforce HTTPS** in Settings → Pages.
 
 ## Roadmap ideas
 

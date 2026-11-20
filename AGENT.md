@@ -42,7 +42,8 @@ npm run og        # regenerate public/og-image.png
 6. **Mobile-first and responsive.** Design at 375px first, then `sm`, `md`, `lg`. There must be no horizontal scroll at any width.
 7. **Accessibility (WCAG AA):** semantic landmarks, one `h1`, ordered headings, `aria-hidden` on decorative SVGs and icons, visible focus (global `:focus-visible`), and meaningful `alt` text on every photo.
 8. **Motion is minimal.** Only the subtle `.reveal` fade/slide; respect `prefers-reduced-motion`.
-9. **Gotcha:** passing `hidden` via `class` to `Button` won't work (its base `inline-flex` wins). Wrap the button in an element that toggles visibility.
+9. **Base path.** The site may be served from a subpath (GitHub Pages project URL). Never hard-code root-relative URLs (`/favicon.svg`) for `public/` files; prefix them with `import.meta.env.BASE_URL`. `astro:assets` images, CSS, and `#anchor` links are already safe.
+10. **Gotcha:** passing `hidden` via `class` to `Button` won't work (its base `inline-flex` wins). Wrap the button in an element that toggles visibility.
 
 ## Verification checklist
 
